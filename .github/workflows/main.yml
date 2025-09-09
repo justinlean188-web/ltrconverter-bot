@@ -29,9 +29,25 @@ jobs:
       run: |
         pip3 install buildozer cython
         
-    - name: Build APK
+    - name: Check buildozer installation
       run: |
-        buildozer android debug
+        buildozer --version
+        buildozer --help
+        
+    - name: Initialize buildozer (if needed)
+      run: |
+        if [ ! -f "buildozer.spec" ]; then
+          buildozer init
+        fi
+        
+    - name: Show buildozer.spec content
+      run: |
+        echo "=== buildozer.spec content ==="
+        cat buildozer.spec
+        
+    - name: Build APK with verbose output
+      run: |
+        buildozer android debug -v
         
     - name: Upload APK
       uses: actions/upload-artifact@v4
